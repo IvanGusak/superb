@@ -13,7 +13,7 @@ import useStyles from './NewReserve.styled'
 const NewReserve = () => {
 	const classes = useStyles();
 	const [showError, setError] = useState(false)
-	const { isModalOpen, newRange, devices } = useStoreState(state => state)
+	const { isModalOpen, newRange, devices, isLoading } = useStoreState(state => state)
 	const { openModal, setNewRange, updateDevice } = useStoreActions(actions => actions)
 
 	const handleClose = useCallback(() => {
@@ -21,7 +21,7 @@ const NewReserve = () => {
 	}, [openModal])
 
 	const handleChangeDate = key => date => {
-		setNewRange({ key, value: date.utc().format() })
+		setNewRange({ key, value: date.utc().second(0).format() })
 	}
 
 	const handleChange = useCallback(({ target }) => {
@@ -30,12 +30,13 @@ const NewReserve = () => {
 
 	const handleSubmit = useCallback(() => {
 		const { reserve } = devices.find(({ id }) => id === newRange.id)
-		const hasError = validateRange(reserve, newRange)
+		const [start, end] = [newRange.start, newRange.end].sort()
+		const hasError = validateRange(reserve, { start, end })
 
-		if(hasError) {
+		if (hasError) {
 			setError(true)
 		} else {
-			updateDevice({ id: newRange.id, reserve: [{ start: newRange.start, end: newRange.end }] })
+			updateDevice({ id: newRange.id, reserve: [{ start, end }] })
 				.then(() => {
 					openModal(false)
 				})
@@ -83,7 +84,7 @@ const NewReserve = () => {
 							onChange={handleChangeDate('end')}
 						/>
 					</Box>
-					<Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+					<Button variant="contained" disabled={isLoading} color="primary" onClick={handleSubmit}>Submit</Button>
 					<Snackbar open={showError} autoHideDuration={6000} onClose={clearError}>
 						<MuiAlert elevation={6} variant="filled" severity="error" onClose={clearError} >
 							Please change date range!

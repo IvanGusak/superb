@@ -3,6 +3,7 @@ import { createStore, persist, thunk, actionOn, action } from 'easy-peasy'
 import fakeDevicesResponse from './fakeDevices.json'
 import { delay } from '../utils'
 import { START_DATE, END_DATE } from '../const'
+import dayjs from "dayjs";
 
 const store = createStore(persist({
     isLoading: false,
@@ -46,7 +47,6 @@ const store = createStore(persist({
             if (target.type === success) {
                 state.devices = state.devices.map(device => {
                     if(device.id === payload.id) {
-                        console.log({ ...device })
                         return { ...device, reserve: [...device.reserve, ...payload.reserve] }
                     }
                     return device
@@ -60,7 +60,7 @@ const store = createStore(persist({
         if (payload) {
             state.newRange = {
                 start: START_DATE,
-                end: END_DATE
+                end: dayjs(END_DATE).minute(0).format()
             }
             state.newRange.id = state.devices[0].id
         }
