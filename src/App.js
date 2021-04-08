@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DayjsUtils from '@date-io/dayjs'
+
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Reservation from './components/Reservation'
+import NewReserve from './components/NewReserve'
+
+const theme = createMuiTheme({
+	typography: {
+		htmlFontSize: 15,
+		body1: {
+			fontWeight: 500
+		}
+	}
+});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<MuiPickersUtilsProvider utils={DayjsUtils}>
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<NewReserve />
+				<Reservation />
+			</ThemeProvider>
+		</MuiPickersUtilsProvider>
+	);
 }
 
 export default App;
