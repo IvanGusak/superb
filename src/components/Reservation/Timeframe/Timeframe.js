@@ -25,23 +25,18 @@ const Timeframe = ({ className, items, component: Wrap, ...rest }) => {
 						<span>{label}</span>
 					</div>
 				))}
+
 			</Box>
 			<Box className={classes.grid}>
 				{items.map(({ reserve = [], id }, index) => (
 					<React.Fragment key={index}>
-						{dayTimeFrame.map(({ key }, dayIndex) => (
-							<div
-								className={classes.box}
-								style={{ gridRow: index + 1, gridColumn: `${(dayIndex || 1) * 2}/${(dayIndex + 1) * 2}` }}
-								key={`grid_${id}_${key}`}
-							/>
-						))}
 						{reserve.map((frame, frameIndex) => (
 							<Frame key={`frame_${id}_${frameIndex}`} row={index + 1} frame={frame} />
 						))}
 					</React.Fragment>
 				))}
 			</Box>
+			<div className={classes.bg} />
 		</Wrap>
 	)
 }
